@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body onload="comenzarTiempo()">
+    <div>
+    <h1 id="cuentaRegresiva">30</h1>
+    <!-- <h1>00:<span id="cuentaRegresiva">30</span></h1> -->
+    <h2>¡Responde a las preguntas lo más rápido que puedas!</h2><br>
+    <h2>¿Cómo te llamas?</h2>
+    <input type:"text" id="respuesta1">
+    <h2>¿Qué edad tienes?</h2>
+    <input type:"text" id="respuesta2">
+    <h2>¿De qué país eres?</h2>
+    <input type:"text" id="respuesta3">
+    <h2>¿A qué te dedicas?</h2>
+    <input type:"text" id="respuesta4">
+    <h2>¿Cuál es tu pasatimpo preferido?</h2>
+    <input type:"text" id="respuesta5"><br>
+    <div class="botones">
+        <button onclick="finalizado()"><b>ENVIAR</b></button>
+        <button onclick="reiniciar()"><b>REINICIAR</b></button>
+    </div>
+    <audio id="audioFinal">
+        <source src="./gameover.mp3" type="audio/mpeg">
+    </audio>
+    </div>
+
+    <script>
+        let tiempoTerminado;
+        let intervaloDeTiempo;
+        
+        //PARA INICIAR  EL TIEMPO
+        function comenzarTiempo(){
+            tiempoTerminado= setTimeout(tiempoCumplido,30000);
+            intervaloDeTiempo = setInterval(cronometro,1000);
+            //ACÁ ES NECESARIO DECLARAR NUEVAMENTE EL H1 COMO NÚMERO PORQUE SI NO SE QUEDA COMO STRING
+            document.getElementById("cuentaRegresiva").textContent=30;
+        }
+        
+        //PARA REDUCIR  EL TIEMPO
+        function cronometro(){
+            let tiempo = document.getElementById("cuentaRegresiva").textContent;
+            
+            document.getElementById("cuentaRegresiva").textContent = tiempo-1;
+        }
+
+        //CUANDO EL TIEMPO SE ACABA
+        function tiempoCumplido(){
+            //CLEAR INTERVAL DETIENE EL INTERVALO
+            clearInterval(intervaloDeTiempo);
+            document.getElementById("cuentaRegresiva").textContent = 0;
+            document.getElementById("cuentaRegresiva").style.color="yellow";
+            document.getElementById("audioFinal").play();
+            alert("JUEGO TERMINADO: Se acabó el tiempo. Inténtalo de nuevo.")
+        }
+
+        //CUANDO SE ENVIAN LAS RESPUESTAS A TIEMPO
+        function finalizado(){
+            clearTimeout(tiempoTerminado);
+            clearInterval(intervaloDeTiempo);
+
+            let fecha = new Date;
+            let respuesta1 = document.getElementById("respuesta1").value;
+            let respuesta2 = document.getElementById("respuesta2").value;
+            let respuesta3 = document.getElementById("respuesta3").value;
+            let respuesta4 = document.getElementById("respuesta4").value;
+            let respuesta5 = document.getElementById("respuesta5").value;
+            let mensaje = fecha.toLocaleDateString("es-Es") + "\n" + "Tus respuestas son:" + "\n" +
+                        "   1. " + respuesta1 + "\n" +
+                        "   2. " + respuesta2 + "\n" +
+                        "   3. " + respuesta3 + "\n" +
+                        "   4. " + respuesta4 + "\n" +
+                        "   5. " + respuesta5 + "\n" +
+                        "¡GANASTE!";
+            alert(mensaje);
+        }
+
+        function reiniciar(){
+            //ESTA FUNCIO VUELVE A CARGAR LA PÁGINA
+            location.reload();
+        }
+    </script>
+</body>
+</html>
